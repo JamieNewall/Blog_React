@@ -6,12 +6,15 @@ import Home from './pages/Home/Home'
 import Nav from './pages/Nav/Nav'
 import 'typeface-roboto'
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
-
+import About from './pages/About/About'
+import {ApolloProvider} from '@apollo/react-hooks'
+import client from './apollo-client/client'
 
 
 function App() {
 
   return (
+      <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
             <Nav/>
             <Router>
@@ -22,10 +25,14 @@ function App() {
                 <Route path={'/login'}>
                     <Login/>
                 </Route>
+                <Route path={'/About'}>
+                    <About/>
+                </Route>
 
             </Switch>
             </Router>
         </ThemeProvider>
+      </ApolloProvider>
       )
 }
 

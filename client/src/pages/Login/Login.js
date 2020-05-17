@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Container from '@material-ui/core/Container'
 import Typography from "@material-ui/core/Typography";
@@ -12,7 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Nav from '../Nav/Nav'
+import gql from 'graphql-tag'
+import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
 
 const useStyles = makeStyles(theme => ({
 
@@ -55,11 +56,59 @@ function Copyright() {
     )
 }
 
+const LOGIN = gql`
+    mutation login($input: credentials) {
+        loginNow(input:$input) {
+            token
+        }
+    }
+`
+
 
 
 const Login = (props) => {
 
     const classes = useStyles()
+    const client = useApolloClient()
+    const [login] = useMutation(LOGIN)
+
+    // const [client, setClient] = useState(apolloClient)
+    const [state, setState] = useState({email:'',password:''})
+
+    const signIn = async (e, client) => {
+        e.preventDefault()
+        console.log('running')
+
+        if (!validateEmail() || !validatePassword()) {
+            return 'invalid email or password'
+        }
+        const {data} = await login({variables: {input: {email: state.email, password: state.password}}})
+
+        if(data){
+            saveUserData(data.loginNow.token)
+            window.location.href = 'http://localhost:3000/'
+
+        }
+
+
+    }
+    //TODO
+    const validateEmail = () => {
+        return true
+    }
+    //TODO
+    const validatePassword = () => {
+        return true
+    }
+
+    const handleChange = (e) => {
+        setState({...state, [e.target.name]:e.target.value})
+    }
+
+
+    const saveUserData = token => {
+        localStorage.setItem("AUTH_TOKEN", token)
+    }
 
 
     return (
@@ -80,6 +129,8 @@ const Login = (props) => {
                         margin={'normal'}
                         required
                         fullWidth
+                        onChange={handleChange}
+                        value={state.email}
                         id={'email'}
                         label={'email address'}
                         name={'email'}
@@ -91,6 +142,8 @@ const Login = (props) => {
                         margin= {'normal'}
                         required
                         fullWidth
+                        onChange={handleChange}
+                        value={state.password}
                         id={'password'}
                         label={'password'}
                         name={'password'}
@@ -105,6 +158,7 @@ const Login = (props) => {
                         fullWidth
                         variant={'contained'}
                         color={'primary'}
+                        onClick={(e) => signIn(e, client)}
                         className={classes.submit}>
                         Sign In
                     </Button>

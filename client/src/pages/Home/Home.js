@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
         marginTop: '-100px'
     },
     break:  {[theme.breakpoints.down('sm')]: {
-    justifyContent: 'center',
-            backgroundColor:'red'
+    justifyContent: 'center'
+
 }}
 }))
 

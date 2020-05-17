@@ -16,11 +16,12 @@ const useStyles = makeStyles((theme) => ({
   },
   navLinks: {
     width: "100%",
+    color: theme.palette.text.primary
   },
   links: {
     "&:hover": {
       color: theme.palette.text.secondary,
-      textDecoration: 'underline'
+      textDecoration: 'none'
 
     },
     marginRight: '20px',
