@@ -47,7 +47,7 @@ class Mongo extends DataSource {
     async loginUser(email , password) {
 
         const user = await this.store.user.findOne({email: email})
-        if(user.length === 0) {
+        if(user === null || user.length === 0) {
             return null
         }
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -5,11 +6,19 @@ import Grid from "@material-ui/core/Grid";
 import Search from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {useApolloClient} from "@apollo/react-hooks";
 import Post from "./Post";
+import gql from 'graphql-tag'
 import Axios from "axios";
+import { ApolloConsumer } from "@apollo/react-components";
+import { Query } from "@apollo/react-components";
 
+
+import {useQuery} from "@apollo/react-hooks";
 const {useState} = require("react");
 const {useEffect} = require("react");
+
+
 
 const useStyles = makeStyles(theme => ({
     search: {
@@ -28,9 +37,21 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
+const getLocalState = gql`
+    query state {
+        anyState @client
+    }
+`
+
+
+
 
 const Home = (props) => {
 
+    const client = useApolloClient()
+    client.writeData({data: {isLoggedin: false}})
+    const {data, loading, error} = useQuery(getLocalState)
+    console.log(data)
     //TODO update
     const [posts,setPosts] = useState([])
 
@@ -53,6 +74,9 @@ const Home = (props) => {
 
     return (
     <Container maxWidth={'md'}>
+
+
+
         <Box mt={10} >
             <Grid container className={`${classes.break} ${classes.search}`} >
                 <Grid item>
@@ -73,8 +97,8 @@ const Home = (props) => {
         <Box mt={4}>
         <Grid container spacing={1} direction={'row'} className={classes.break}>
             {posts.map((p, index) => (
-                <Grid item className={classes.post} sm={4}>
-                <Post  postTitle={p.title.slice(0,8)} postBody={p.body.slice(0,20)} key={index}/>
+                <Grid key={index} item className={classes.post} sm={4}>
+                <Post  postTitle={p.title.slice(0,8)} postBody={p.body.slice(0,20)} />
                 </Grid>
             ))}
         </Grid>

@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Nav = (props) => {
+const Navbar = (props) => {
   const classes = useStyles();
 
   return (
-    <Box component={"Nav"} className={classes.nav}>
+    <Box component={"nav"} className={classes.nav}>
       <CssBaseline />
 
       <Grid
@@ -58,4 +58,4 @@ const Nav = (props) => {
   );
 };
 
-export default Nav;
+export default Navbar;

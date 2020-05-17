@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useState, useContext} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Container from '@material-ui/core/Container'
@@ -86,7 +87,7 @@ const Login = (props) => {
 
         if(data){
             saveUserData(data.loginNow.token)
-            window.location.href = 'http://localhost:3000/'
+            // window.location.href = 'http://localhost:3000/'
 
         }
 
