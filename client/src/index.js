@@ -1,72 +1,91 @@
-import { ApolloClient } from 'apollo-client'
-import App from './App'
-import { ApolloProvider } from '@apollo/react-hooks';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {typeDefs} from './apollo-client/client-schema'
-const  {gql} = require("apollo-boost")
-const HttpLink = require("apollo-link-http").HttpLink
-const inMemoryCache = require("apollo-cache-inmemory").InMemoryCache
-const {persistCache} = require('apollo-cache-persist')
+import { ApolloClient } from "apollo-client";
+import App from "./App";
+import { ApolloProvider } from "@apollo/react-hooks";
+import React from "react";
+import ReactDOM from "react-dom";
+import { typeDefs } from "./apollo-client/client-schema";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
-
-const cache = new inMemoryCache()
-const link = new HttpLink({
-    uri: "http://localhost:4000",
-
-    // headers: {authorization: localStorage.getItem('AUTH_TOKEN')}
-})
+const { useState } = require("react");
+const { useEffect } = require("react");
+const { gql } = require("apollo-boost");
+const HttpLink = require("apollo-link-http").HttpLink;
+const inMemoryCache = require("apollo-cache-inmemory").InMemoryCache;
 
 const resolvers = {
-    Query: {
-        async anyState(parent, args, {cache}, info){
-            console.log('it was hit')
+  Query: {
+    async anyState(parent, args, { cache }, info) {
+      const queryResult = await cache.readQuery({
+        query: gql`
+          query getState {
+            state @client
+          }
+        `,
+      });
+      return queryResult;
+    },
+  },
+  Mutation: {
+    async loginWarning(parent, args, { cache }, info) {
+      cache.writeData({ data: { loginWarning: args.bool } });
 
-            const queryResult = await cache.readQuery({
-                query: gql`
-            query getState {
-                state @client
-            }
-            `
-            })
-            return queryResult
-        }
+      return args.bool;
+    },
 
+    async isLoggedInMutation(parent, args, { cache }, info) {
+      const res = await cache.readQuery({
+        query: gql`
+          query isLoggedIn {
+            isLoggedIn @client
+          }
+        `,
+      });
 
-    }
-}
+      let bool = res.isLoggedIn;
+      if (bool) {
+        bool = false;
+      } else {
+        bool = true;
+      }
+      console.log(`running mutation, changing to ${bool}`);
+      await cache.writeData({ data: { isLoggedIn: bool } });
+    },
+  },
+};
 
 const init = async () => {
-    await persistCache({cache, storage:window.localStorage})
-    const client = new ApolloClient({
-        cache, link,typeDefs,resolvers
+  const ApolloApp = () => {
+    const [client, setClient] = useState(undefined);
 
-    })
+    useEffect(async () => {
+      const cache = new inMemoryCache();
+      const link = new HttpLink({
+        uri: "http://localhost:4000",
+      });
 
-    try{
-        cache.writeData({data: {state: 'some local state'}})
-    } catch (error) {
+      const client = new ApolloClient({
+        cache,
+        link,
+        typeDefs,
+        resolvers,
+      });
 
-    }
+      setClient(client);
+    }, []);
 
-    const ApolloApp = () => (
+    if (client === undefined) return <div>Loading...</div>;
+
+    return (
+      <Provider store={store}>
         <ApolloProvider client={client}>
-            <App/>
+          <App />
         </ApolloProvider>
-    )
+      </Provider>
+    );
+  };
 
-    ReactDOM.render(
-        <ApolloApp/>, document.getElementById('root')
-    )
+  ReactDOM.render(<ApolloApp />, document.getElementById("root"));
+};
 
-}
-
-
-init()
-
-
-
-
-
-
-
+init();

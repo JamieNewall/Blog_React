@@ -13,7 +13,11 @@ const dataSources = () => ({
 })
 
 const context = async ({req}) => {
-    const auth = req.headers || ''
+
+
+    //TODO add backend auth to routes
+    const auth = req.headers || '';
+
     // const email = new Buffer(auth, 'base64').toString('ascii')
 
     // if(! isEmail.validate(email)) return {user: null}

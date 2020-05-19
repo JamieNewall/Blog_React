@@ -6,12 +6,14 @@ import Grid from "@material-ui/core/Grid";
 import Search from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {useMutation} from "@apollo/react-hooks";
+import {Query} from '@apollo/react-components'
 import {useApolloClient} from "@apollo/react-hooks";
 import Post from "./Post";
 import gql from 'graphql-tag'
 import Axios from "axios";
 import { ApolloConsumer } from "@apollo/react-components";
-import { Query } from "@apollo/react-components";
+
 
 
 import {useQuery} from "@apollo/react-hooks";
@@ -47,13 +49,11 @@ const getLocalState = gql`
 
 
 const Home = (props) => {
-
     const client = useApolloClient()
-    client.writeData({data: {isLoggedin: false}})
-    const {data, loading, error} = useQuery(getLocalState)
-    console.log(data)
+
     //TODO update
     const [posts,setPosts] = useState([])
+
 
 
     //TODO update with backend

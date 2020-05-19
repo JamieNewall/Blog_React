@@ -15,6 +15,8 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import gql from 'graphql-tag'
 import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
+import {Query} from '@apollo/react-components'
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
 
@@ -39,6 +41,9 @@ const useStyles = makeStyles(theme => ({
     submit: {
         margin:theme.spacing(3,0,2),
 
+    },
+    warning: {
+        color: "red"
     }
 }))
 
@@ -67,27 +72,53 @@ const LOGIN = gql`
 
 
 
-const Login = (props) => {
+
+const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginWarningToTrue, changeLoginStatusToTrue}) => {
 
     const classes = useStyles()
     const client = useApolloClient()
+
+
     const [login] = useMutation(LOGIN)
+
+
+
+
+
+
+    // const {data:{loginWarning}} = useQuery(LOGIN_WARNING)
+
+
 
     // const [client, setClient] = useState(apolloClient)
     const [state, setState] = useState({email:'',password:''})
 
+    const msgTimer = () => {
+        setTimeout(function() {
+        changeLoginWarningToFalse()
+        },4000)
+    }
+
     const signIn = async (e, client) => {
         e.preventDefault()
-        console.log('running')
+
 
         if (!validateEmail() || !validatePassword()) {
             return 'invalid email or password'
         }
         const {data} = await login({variables: {input: {email: state.email, password: state.password}}})
 
-        if(data){
+        if(data.loginNow.token === null) {
+
+           changeLoginWarningToTrue()
+            msgTimer()
+        }
+        if(data.loginNow.token !== null){
             saveUserData(data.loginNow.token)
-            // window.location.href = 'http://localhost:3000/'
+            changeLoginStatusToTrue()
+
+
+            window.location.href = 'http://localhost:3000/'
 
         }
 
@@ -124,12 +155,23 @@ const Login = (props) => {
                 <Typography component={'h1'} variant={'h5'}>
                     Sign In
                 </Typography>
+
+                { loginWarning &&
+                        <Box className={classes.warning}>{'We do not recognise that user or password, please recheck your credentials'}</Box>
+
+                }
+
+
+
+
                 <form className={classes.form} noValidate>
                     <TextField
                         variant={"outlined"}
                         margin={'normal'}
                         required
                         fullWidth
+                        error={loginWarning}
+                        helperText={loginWarning ? 'Please verify your email was entered correctly.' : ''}
                         onChange={handleChange}
                         value={state.email}
                         id={'email'}
@@ -143,6 +185,8 @@ const Login = (props) => {
                         margin= {'normal'}
                         required
                         fullWidth
+                        error={loginWarning}
+                        helperText={loginWarning ? 'Please verify your password is correct.' : ''}
                         onChange={handleChange}
                         value={state.password}
                         id={'password'}
@@ -186,4 +230,17 @@ const Login = (props) => {
     )
 };
 
-export default Login;
+
+const mapStateToProps = (state) => ({
+    isLoggedIn : state.isLoggedIn,
+    loginWarning: state.loginWarning
+})
+
+const mapDispatchToProps = (dispatch) => ({
+        changeLoginWarningToFalse: () => dispatch({type:'CHANGE_LOGIN_WARNING_FALSE'}),
+    changeLoginWarningToTrue: () => dispatch({type:'CHANGE_LOGIN_WARNING_TRUE'}),
+    changeLoginStatusToTrue : () => dispatch({type:'CHANGE_LOGIN_STATUS_TRUE'})
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,0 +1,3 @@
+
+
+export const GET_IS_LOGGEDIN = 'GET_IS_LOGGEDIN'

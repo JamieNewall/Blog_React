@@ -57,7 +57,7 @@ class Mongo extends DataSource {
         if (response) {
             const jwt = await this.getToken(123)
 
-            this.store.token.create({user:_id, token:jwt})
+            await this.store.token.create({user:_id, token:jwt})
             return jwt
         } else {
             return null
