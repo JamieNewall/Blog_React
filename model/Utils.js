@@ -71,6 +71,12 @@ const getComment = async () => {
     console.log(comment)
 }
 
+const removeTokens = () => {
+    TokenDb.deleteMany({})
+    console.log('all tokens deleted')
+}
+
+
 const hashPass = (pass) => {
     const salt = 10
    return bcrypt.hash(pass, salt)
@@ -88,6 +94,8 @@ const hash = hashPass('mypassword').then(res => {
     return res
 })
 
+
+removeTokens()
 
 // const ahash = '$2b$10$dDvsmCCxQiHNu7cbcoTaC.k21Ma0zmpWJEaHL9Mb7MZ8.CzQUGZ7a'
 
