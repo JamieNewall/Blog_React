@@ -15,8 +15,13 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import gql from 'graphql-tag'
 import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
+import {Redirect, BrowserRouter} from 'react-router-dom'
+
 import {Query} from '@apollo/react-components'
 import {connect} from 'react-redux'
+
+
+const {useEffect} = require("react");
 
 const useStyles = makeStyles(theme => ({
 
@@ -73,7 +78,7 @@ const LOGIN = gql`
 
 
 
-const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginWarningToTrue, changeLoginStatusToTrue}) => {
+const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginWarningToTrue, changeLoginStatusToTrue, getState}) => {
 
     const classes = useStyles()
     const client = useApolloClient()
@@ -82,6 +87,15 @@ const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginW
     const [login] = useMutation(LOGIN)
 
 
+    useEffect( () => {
+
+        const cleanupFunc = () => {
+            console.log('running cleanup function')
+        }
+
+        return cleanupFunc
+
+    },[])
 
 
 
@@ -110,15 +124,16 @@ const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginW
 
         if(data.loginNow.token === null) {
 
-           changeLoginWarningToTrue()
+           await changeLoginWarningToTrue()
             msgTimer()
         }
         if(data.loginNow.token !== null){
+
+            await changeLoginStatusToTrue()
+
             saveUserData(data.loginNow.token)
-            changeLoginStatusToTrue()
-
-
-            window.location.href = 'http://localhost:3000/'
+            // BrowserHistory.push('/')
+            // window.location.href = 'http://localhost:3000/'
 
         }
 
@@ -142,8 +157,18 @@ const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginW
         localStorage.setItem("AUTH_TOKEN", token)
     }
 
+    if (isLoggedIn) {
+        return (
+
+                <Redirect to={'/'}/>
+
+        )
+    }
+
 
     return (
+
+
         <React.Fragment>
 
         <Container className={classes.root} maxWidth={"xs"}>
@@ -227,6 +252,7 @@ const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginW
         </Container>
         </React.Fragment>
 
+
     )
 };
 
@@ -239,7 +265,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
         changeLoginWarningToFalse: () => dispatch({type:'CHANGE_LOGIN_WARNING_FALSE'}),
     changeLoginWarningToTrue: () => dispatch({type:'CHANGE_LOGIN_WARNING_TRUE'}),
-    changeLoginStatusToTrue : () => dispatch({type:'CHANGE_LOGIN_STATUS_TRUE'})
+    changeLoginStatusToTrue : () => dispatch({type:'CHANGE_LOGIN_STATUS_TRUE'}),
+    getState : () => dispatch({type: 'DEFAULT'})
 })
 
 
