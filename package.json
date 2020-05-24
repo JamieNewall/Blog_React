@@ -29,6 +29,7 @@
   "description": "",
   "dependencies": {
     "@material-ui/system": "^4.9.13",
+    "@types/react-redux": "^7.1.9",
     "apollo-datasource": "^0.7.0",
     "apollo-server": "^2.13.1",
     "apollo-server-testing": "^2.13.1",

@@ -87,15 +87,7 @@ const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginW
     const [login] = useMutation(LOGIN)
 
 
-    useEffect( () => {
 
-        const cleanupFunc = () => {
-            console.log('running cleanup function')
-        }
-
-        return cleanupFunc
-
-    },[])
 
 
 

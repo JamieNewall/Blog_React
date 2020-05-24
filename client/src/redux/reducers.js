@@ -1,4 +1,5 @@
 import {GET_IS_LOGGEDIN} from './actions'
+import {ADD_POST_TO_STATE} from './actions'
 
 
 
@@ -19,6 +20,21 @@ const initialState = {
             return {...state, loginWarning: true}
         case 'CHANGE_LOGIN_STATUS_TRUE':
             return {...state, isLoggedIn: true}
+        case 'ADD_TITLE_TO_STATE':
+            return {...state, titleText: action.payload}
+        case 'ADD_TAG_INPUT_TO_STATE':
+            return {...state, tagInputValue: action.payload}
+        case 'ADD_TAGS_TO_STATE':
+
+            return {...state, tagsArray: [...state.tagsArray, action.payload]}
+
+        case 'ADD_TAG_INPUT_SELECTED_TO_STATE':
+            return {...state, tagInputValueSelected: action.payload}
+        case 'REMOVE_TAG_FROM_TAG_ARRAY':
+            return {...state, tagsArray: state.tagsArray.filter(item => item !== action.payload)}
+        case 'ADD_POST_TO_STATE':
+
+            return {...state, currentPostWordCount: action.payload.length, postText: action.payload }
         default:
             return {...state}
     }

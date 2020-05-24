@@ -6,6 +6,8 @@ import ReactDOM from "react-dom";
 import { typeDefs } from "./apollo-client/client-schema";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import './assets/auto-complete.css'
 
 const { useState } = require("react");
 const { useEffect } = require("react");
@@ -77,11 +79,13 @@ const init = async () => {
     if (client === undefined) return <div>Loading...</div>;
 
     return (
-      <Provider store={store}>
-        <ApolloProvider client={client}>
-          <App />
-        </ApolloProvider>
-      </Provider>
+      <Router basename={'/'}>
+        <Provider store={store}>
+          <ApolloProvider client={client}>
+            <App />
+          </ApolloProvider>
+        </Provider>
+      </Router>
     );
   };
 

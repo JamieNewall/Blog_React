@@ -6,39 +6,34 @@ import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import Navbar from "./pages/Nav/Nav";
 import "typeface-roboto";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import About from "./pages/About/About";
-import { ApolloProvider, useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { connect } from "react-redux";
+import ProtectedRoute from "./pages/Login/ProtectedRoute";
+import addPost from './pages/add/addPost'
 
 function App({ isLoggedIn }) {
   console.log(isLoggedIn);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Navbar />
-      <Router>
+
+      <ThemeProvider theme={theme}>
+        <Navbar />
+
         <Switch>
-          <Route
-              path={"/"}
-              render={() => (isLoggedIn ? <Home /> : <Login />)}
-          />
-          <Route
-            path={"/home"}
-            render={() => (isLoggedIn ? <Home /> : <Login />)}
-          />
-
-
-          <Route path={"/login"}>
+          <ProtectedRoute Component={Home} exact path={"/"} />
+          <ProtectedRoute Component={Home} exact path={"/home"} />
+         <ProtectedRoute Component={addPost} exact path={"/add_post"} />
+          <Route exact path={"/login"}>
             <Login />
           </Route>
-          <Route path={"/About"}>
+          <Route exact path={"/about"}>
             <About />
           </Route>
         </Switch>
-      </Router>
-    </ThemeProvider>
+
+      </ThemeProvider>
+
   );
 }
 
