@@ -27,7 +27,9 @@ const initialState = {
         case 'ADD_TAGS_TO_STATE':
 
             return {...state, tagsArray: [...state.tagsArray, action.payload]}
-
+        case 'GET_POST_FROM_LOCAL_STATE':
+            console.log('my reducer has been hit')
+            return {...state}
         case 'ADD_TAG_INPUT_SELECTED_TO_STATE':
             return {...state, tagInputValueSelected: action.payload}
         case 'REMOVE_TAG_FROM_TAG_ARRAY':

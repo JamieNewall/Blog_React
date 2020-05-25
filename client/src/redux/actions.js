@@ -28,3 +28,7 @@ export const ADD_TAG_INPUT_SELECTED_TO_STATE = function (payload) {
 export const REMOVE_TAG_FROM_TAG_ARRAY = function(payload) {
     return {type: 'REMOVE_TAG_FROM_TAG_ARRAY', payload}
 }
+
+export const GET_POST_FROM_LOCAL_STATE = function(){
+    return {type:'GET_POST_FROM_LOCAL_STATE'}
+}

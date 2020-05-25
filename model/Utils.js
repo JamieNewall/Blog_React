@@ -30,14 +30,15 @@ const getUser = async (email) => {
 }
 
 
-const createPost = async ( postContent, postTitle, user) => {
+const createPost = async ( postContent, postTitle, user, tags) => {
     const post = await new PostsDb({
         user,
         postDate: Date.now(),
         postContent,
         postTitle,
         views: 0,
-        likes: 0
+        likes: 0,
+        tags: tags
     })
     await post.save()
 
@@ -76,6 +77,12 @@ const removeTokens = () => {
     console.log('all tokens deleted')
 }
 
+const removePosts = async () => {
+    await PostsDb.deleteMany({})
+    console.log('all posts deleted')
+}
+
+
 
 const hashPass = (pass) => {
     const salt = 10
@@ -95,7 +102,7 @@ const hash = hashPass('mypassword').then(res => {
 })
 
 
-removeTokens()
+// removeTokens()
 
 // const ahash = '$2b$10$dDvsmCCxQiHNu7cbcoTaC.k21Ma0zmpWJEaHL9Mb7MZ8.CzQUGZ7a'
 
@@ -107,6 +114,7 @@ removeTokens()
 // createComment('5ebc1a3013234b054c6f7809', 'this is the comment')
 // createToken('5ebc0ce9ac118441684943bd','TOKEN2299')
 // getUser( 'jnewall93@outlook.com')
+removePosts()
 
 
 

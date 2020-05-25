@@ -12,7 +12,7 @@ const typeDefs = gql`
     }
     
     type Mutation {
-        addPost(post: String): Post
+        addPost(post: newPost): Post
         addUser(user: ID): User
         addComment(comment: String): Comment
         loginNow(input: credentials): token
@@ -26,6 +26,13 @@ const typeDefs = gql`
     
     scalar Date
 
+    input newPost {
+        postContent: String
+        postTitle: String
+        tags: [String]
+        user: String
+    }
+    
     type Post {
         userId: String
         postDate: Date

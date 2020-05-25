@@ -5,6 +5,7 @@ import {ADD_TAGS_TO_STATE} from '../../redux/actions'
 import {ADD_TAG_INPUT_TO_STATE} from '../../redux/actions'
 import {ADD_TAG_INPUT_SELECTED_TO_STATE} from '../../redux/actions'
 import {REMOVE_TAG_FROM_TAG_ARRAY} from '../../redux/actions'
+import {GET_POST_FROM_LOCAL_STATE} from '../../redux/actions'
 
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from 'react-redux'
@@ -14,6 +15,9 @@ import Chip from '@material-ui/core/Chip'
 import CssBaseLine from '@material-ui/core/CssBaseline'
 import {Label} from "@material-ui/icons";
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Button from "@material-ui/core/Button";
+import {useMutation} from "@apollo/react-hooks";
+import gql from "graphql-tag";
 
 const {useRef} = require("react");
 
@@ -58,13 +62,18 @@ const useStyles = makeStyles( (theme) => ({
     },
     autocompleteInput: {
 
-}
+},
+    button: {
+        marginTop: '20px',
+        width: '15%'
+    }
 }))
 
 
 
 const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, addPostToLocalState, titleText, addTitleToLocalState,
-                      tagInputValue, addTagInputToLocalState, tagsArray, tagInputValueSelected, addTagInputSelectedToLocalState, deleteTagFromState}) => {
+                      tagInputValue, addTagInputToLocalState, tagsArray, tagInputValueSelected, addTagInputSelectedToLocalState, deleteTagFromState,
+                      getPostFromLocalState}) => {
 
     const classes = useStyles()
 
@@ -74,15 +83,14 @@ const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, ad
         globalRef.current = Array(tagsArray.length).fill().map((_, i) => globalRef.current[i] || createRef())
         console.log(globalRef.current)
     }
-    // tagsArray.map(item =>   {
-    //
-    //  let ref = globalRef[item]
-    //
-    //   refContainer[item] = ref
-    //
-    // })
 
-    // console.log(refContainer)
+    const [submitPostMutation, post ] = useMutation(gql`
+        mutation addPost($newPost:newPost) {
+            addPost(post:$newPost) {
+                postTitle
+            }
+        }
+    `)
 
 
     const chipRef = useRef(null)
@@ -143,6 +151,25 @@ const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, ad
 
     }
 
+async function submitPost(e) {
+        e.preventDefault()
+        const info = {postContent: postText, postTitle: titleText, tags: tagsArray, user: '5ebe9ac5405ef3302cf17d56'}
+        console.log(JSON.stringify(info))
+
+    submitPostMutation({variables: {newPost: info
+                    }}).then(res => console.log(res))
+
+        }
+
+
+
+
+
+
+
+
+
+
 
 
     return(
@@ -157,12 +184,13 @@ const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, ad
                        id={'post-title'}
             />
 
-            <h2 className={classes.title}>Post Body</h2>
+            <h2 className={classes.title}>Content</h2>
             <TextField
             className={classes.inputPost}
             id={'post-body'}
             label={"Add Post Here...."}
             multiline={true}
+            rows={10}
             rowsMax={30}
             onChange={handleChange}
             value={postText}
@@ -205,6 +233,7 @@ const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, ad
                         className={classes.chip}
                         index={i}
                         label={item}
+                        color={'secondary'}
                         ref={globalRef.current[i]}
                         onClick={handleClick}
                         onDelete={(e) => handleDelete(e,i)}
@@ -219,6 +248,10 @@ const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, ad
                 </>
 
             </div>
+
+            <Button className={classes.button} variant="contained" color="primary" onClick={submitPost}>
+                Add Post
+            </Button>
 
         </form>
 
@@ -248,7 +281,8 @@ const mapDispatchToProps = (dispatch) => ({
     addTagsToLocalState: (payload) => dispatch(ADD_TAGS_TO_STATE(payload)),
     addTagInputToLocalState: (payload) => dispatch(ADD_TAG_INPUT_TO_STATE(payload)),
     addTagInputSelectedToLocalState: (payload) => dispatch(ADD_TAG_INPUT_SELECTED_TO_STATE(payload)),
-    deleteTagFromState: (payload) => dispatch(REMOVE_TAG_FROM_TAG_ARRAY(payload))
+    deleteTagFromState: (payload) => dispatch(REMOVE_TAG_FROM_TAG_ARRAY(payload)),
+    getPostFromLocalState: () => dispatch(GET_POST_FROM_LOCAL_STATE())
 })
 
 const programmingLanguages = [

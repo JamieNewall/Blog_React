@@ -16,11 +16,12 @@ const userSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
     postDate: mongoose.Schema.Types.Date,
-    postContent: {type: String, required: true},
-    postTitle: {type: String, required: true},
+    postContent: {type: String},
+    postTitle: {type: String},
     views: Number,
     likes: Number,
-    PostId: Number
+    PostId: Number,
+    tags: Array
 })
 
 const commentSchema = new mongoose.Schema({

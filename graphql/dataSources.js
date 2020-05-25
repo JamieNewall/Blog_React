@@ -1,5 +1,6 @@
 const {DataSource} = require('apollo-datasource')
 const jwt = require('jsonwebtoken')
+const { uuid } = require('uuidv4');
 const bcrypt = require('bcrypt')
 
 class Mongo extends DataSource {
@@ -69,6 +70,28 @@ class Mongo extends DataSource {
     comparePass = (pass, hash) => {
         return bcrypt.compare(pass, hash)
     }
+
+
+    async createPost(postContent, postTitle, tags, user) {
+
+        console.log(postContent, postTitle, tags, user)
+        let post = {
+            user:user,
+            postDate: Date.now(),
+            postContent : postContent,
+            postId: uuid(),
+            postTitle : postTitle,
+            views: 0,
+            likes: 0,
+            tags: tags
+        }
+
+        let res = await this.store.post.create(post)
+        return res;
+    }
+
+
+
 }
 
 

@@ -32,6 +32,13 @@ const resolvers = {
 
             const jwt = await context.dataSources.mongo.loginUser(args.input.email, args.input.password)
             return {user:args.input.email ,token: jwt}
+        },
+
+        async addPost(parent, args, context, info) {
+            console.log(`args in resolver: ${args.post}`)
+            let post = await context.dataSources.mongo.createPost(args.post.postContent, args.post.postTitle, args.post.tags, args.post.user)
+
+            return post;
         }
     }
 
