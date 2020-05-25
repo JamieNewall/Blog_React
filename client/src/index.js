@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import './assets/auto-complete.css'
+import { SnackbarProvider} from 'notistack';
+
 
 const { useState } = require("react");
 const { useEffect } = require("react");
@@ -82,7 +84,9 @@ const init = async () => {
       <Router basename={'/'}>
         <Provider store={store}>
           <ApolloProvider client={client}>
+            <SnackbarProvider maxSnack={3}>
             <App />
+            </SnackbarProvider>
           </ApolloProvider>
         </Provider>
       </Router>

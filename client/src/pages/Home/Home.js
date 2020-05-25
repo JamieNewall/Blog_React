@@ -78,7 +78,7 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
     },[])
 
     const classes = useStyles()
-    // const {  enqueueSnackbar }  = useSnackbar();
+    const {  enqueueSnackbar }  = useSnackbar();
 
     return (
 
@@ -86,9 +86,9 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
 
         {submitSuccessful &&
 
+            enqueueSnackbar('Post Added!', {variant: 'success'})
 
 
-            <div/>
 
         }
 

@@ -13,6 +13,7 @@ import ProtectedRoute from "./pages/Login/ProtectedRoute";
 import addPost from './pages/add/addPost'
 
 
+
 function App({ isLoggedIn }) {
   console.log(isLoggedIn);
 
