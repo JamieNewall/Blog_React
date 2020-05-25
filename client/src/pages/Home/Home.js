@@ -6,6 +6,8 @@ import Grid from "@material-ui/core/Grid";
 import Search from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {connect} from 'react-redux'
+import { SnackbarProvider, useSnackbar } from 'notistack';
 import {useMutation} from "@apollo/react-hooks";
 import {Query} from '@apollo/react-components'
 import {useApolloClient} from "@apollo/react-hooks";
@@ -13,12 +15,20 @@ import Post from "./Post";
 import gql from 'graphql-tag'
 import Axios from "axios";
 import { ApolloConsumer } from "@apollo/react-components";
+import {SET_POSTS} from '../../redux/actions'
 
 
 
 import {useQuery} from "@apollo/react-hooks";
 const {useState} = require("react");
 const {useEffect} = require("react");
+
+
+
+
+
+
+
 
 
 
@@ -48,34 +58,39 @@ const getLocalState = gql`
 
 
 
-const Home = (props) => {
+const Home = ({props, resetSubmit, submitSuccessful}) => {
+
     const client = useApolloClient()
 
-    //TODO update
-    const [posts,setPosts] = useState([])
-
-
-
-    //TODO update with backend
+    const GetAllPostsQuery = gql`
+        query {
+            getAllPosts {
+                postTitle
+                postContent
+                views
+            }
+        }
+    `
     useEffect(() => {
-        Axios.get('https://jsonplaceholder.typicode.com/posts/').then(res => {
-            let postData = []
-            res.data.map( p => {
-                let post ={};
-                post.title = p.title;
-                post.body = p.body;
-                postData.push(post)
-            })
-            setPosts(postData)
-        }).catch( err => console.log(err))
+
+     resetSubmit()
+
     },[])
 
     const classes = useStyles()
+    // const {  enqueueSnackbar }  = useSnackbar();
 
     return (
+
     <Container maxWidth={'md'}>
 
+        {submitSuccessful &&
 
+
+
+            <div/>
+
+        }
 
         <Box mt={10} >
             <Grid container className={`${classes.break} ${classes.search}`} >
@@ -96,15 +111,45 @@ const Home = (props) => {
 
         <Box mt={4}>
         <Grid container spacing={1} direction={'row'} className={classes.break}>
-            {posts.map((p, index) => (
-                <Grid key={index} item className={classes.post} sm={4}>
-                <Post  postTitle={p.title.slice(0,8)} postBody={p.body.slice(0,20)} />
-                </Grid>
-            ))}
+
+            <Query query={GetAllPostsQuery}>
+                { ({data, error, loading}) => {
+                    if (loading) return 'loading....'
+                    if (error) return 'something went wrong....'
+
+                    return (
+                        <>
+                        { data.getAllPosts.map( (post, i) => {
+                            return (
+                                <Grid key={i} item className={classes.post} sm={4}>
+                                <Post postTitle={post.postTitle.slice(0,8)} postBody={post.postContent.slice(0,20)}  />
+                                </Grid>
+                                )
+                        })}
+                        </>
+                        )}}
+            </Query>
+
+
         </Grid>
         </Box>
 
-    </Container>)
+    </Container>
+        )
 };
 
-export default Home;
+
+const stateToProps = (state) => ({
+    submitSuccessful: state.submitSuccessful,
+    allPosts: state.allPosts
+
+})
+
+const dispatchToProps = (dispatch) => ({
+    resetSubmit: () => dispatch({type:'RESET_SUBMIT'}),
+
+})
+
+
+
+export default connect(stateToProps, dispatchToProps)(Home);

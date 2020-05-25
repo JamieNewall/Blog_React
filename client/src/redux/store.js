@@ -5,8 +5,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 const middleware = [thunk]
 
-const initState = {isLoggedIn: true, loginWarning: false, postText: '',
-    currentPostWordCount: 0, titleText: '', tagsArray: [], tagInputValue:'',tagInputValueSelected:''}
+const initState = {allPosts: [], isLoggedIn: true, loginWarning: false, postText: '',
+    currentPostWordCount: 0, titleText: '', tagsArray: [], tagInputValue:'',tagInputValueSelected:'',
+submitSuccessful: false}
 
 const store = createStore(
     rootReducer, initState,

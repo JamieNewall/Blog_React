@@ -32,3 +32,11 @@ export const REMOVE_TAG_FROM_TAG_ARRAY = function(payload) {
 export const GET_POST_FROM_LOCAL_STATE = function(){
     return {type:'GET_POST_FROM_LOCAL_STATE'}
 }
+
+export const SUBMIT_SUCCESSFUL = function() {
+    return {type: 'SUBMIT_SUCCESSFUL'}
+}
+
+export const SET_POSTS = function(payload) {
+    return {type: 'SET_POSTS', payload}
+}

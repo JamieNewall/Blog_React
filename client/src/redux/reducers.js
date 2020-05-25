@@ -30,10 +30,16 @@ const initialState = {
         case 'GET_POST_FROM_LOCAL_STATE':
             console.log('my reducer has been hit')
             return {...state}
+        case 'SET_POSTS':
+            return {...state, allPosts: [...state.allPosts, ...action.payload]}
         case 'ADD_TAG_INPUT_SELECTED_TO_STATE':
             return {...state, tagInputValueSelected: action.payload}
         case 'REMOVE_TAG_FROM_TAG_ARRAY':
             return {...state, tagsArray: state.tagsArray.filter(item => item !== action.payload)}
+        case 'SUBMIT_SUCCESSFUL':
+            return {...state, submitSuccessful: true}
+        case 'RESET_SUBMIT':
+            return {...state, submitSuccessful: false}
         case 'ADD_POST_TO_STATE':
 
             return {...state, currentPostWordCount: action.payload.length, postText: action.payload }

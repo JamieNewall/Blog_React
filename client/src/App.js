@@ -12,18 +12,23 @@ import { connect } from "react-redux";
 import ProtectedRoute from "./pages/Login/ProtectedRoute";
 import addPost from './pages/add/addPost'
 
+
 function App({ isLoggedIn }) {
   console.log(isLoggedIn);
 
   return (
 
       <ThemeProvider theme={theme}>
+
         <Navbar />
 
         <Switch>
+
           <ProtectedRoute Component={Home} exact path={"/"} />
           <ProtectedRoute Component={Home} exact path={"/home"} />
+
          <ProtectedRoute Component={addPost} exact path={"/add_post"} />
+
           <Route exact path={"/login"}>
             <Login />
           </Route>
@@ -32,7 +37,11 @@ function App({ isLoggedIn }) {
           </Route>
         </Switch>
 
+
+
       </ThemeProvider>
+
+
 
   );
 }

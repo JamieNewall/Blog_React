@@ -6,6 +6,7 @@ import {ADD_TAG_INPUT_TO_STATE} from '../../redux/actions'
 import {ADD_TAG_INPUT_SELECTED_TO_STATE} from '../../redux/actions'
 import {REMOVE_TAG_FROM_TAG_ARRAY} from '../../redux/actions'
 import {GET_POST_FROM_LOCAL_STATE} from '../../redux/actions'
+import {SUBMIT_SUCCESSFUL} from '../../redux/actions'
 
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from 'react-redux'
@@ -18,6 +19,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Button from "@material-ui/core/Button";
 import {useMutation} from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import {Redirect} from "react-router-dom";
 
 const {useRef} = require("react");
 
@@ -73,7 +75,7 @@ const useStyles = makeStyles( (theme) => ({
 
 const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, addPostToLocalState, titleText, addTitleToLocalState,
                       tagInputValue, addTagInputToLocalState, tagsArray, tagInputValueSelected, addTagInputSelectedToLocalState, deleteTagFromState,
-                      getPostFromLocalState}) => {
+                      getPostFromLocalState, submitSuccessful, submitSuccessfulDispatch}) => {
 
     const classes = useStyles()
 
@@ -132,13 +134,9 @@ const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, ad
 
     }
 
+    const handleClick = () => {}
 
 
-
-
-    function handleClick() {
-
-    }
 
     function handleDelete(e,index) {
         let strToRemove = globalRef.current[index].current.children[0].textContent
@@ -151,13 +149,28 @@ const AddPost = ( {props,currentPostWordCount, postText, addTagsToLocalState, ad
 
     }
 
+
+
 async function submitPost(e) {
         e.preventDefault()
         const info = {postContent: postText, postTitle: titleText, tags: tagsArray, user: '5ebe9ac5405ef3302cf17d56'}
         console.log(JSON.stringify(info))
 
-    submitPostMutation({variables: {newPost: info
-                    }}).then(res => console.log(res))
+
+        try {
+            await submitPostMutation({variables: {newPost: info
+                }})
+
+            submitSuccessfulDispatch()
+
+        } catch(e){
+            alert('There was an error')
+        }
+
+
+
+
+
 
         }
 
@@ -166,6 +179,15 @@ async function submitPost(e) {
 
 
 
+
+    if (submitSuccessful) {
+        console.log('redirecting....')
+        return (
+
+            <Redirect to={'/'}/>
+
+        )
+    }
 
 
 
@@ -270,7 +292,8 @@ const mapStateToProps = (state) => ({
     titleText: state.titleText,
     tagInputValue: state.tagInputValue,
     tagsArray: state.tagsArray,
-    tagInputValueSelected: state.tagInputValueSelected
+    tagInputValueSelected: state.tagInputValueSelected,
+    submitSuccessful: state.submitSuccessful
 
 })
 
@@ -282,7 +305,8 @@ const mapDispatchToProps = (dispatch) => ({
     addTagInputToLocalState: (payload) => dispatch(ADD_TAG_INPUT_TO_STATE(payload)),
     addTagInputSelectedToLocalState: (payload) => dispatch(ADD_TAG_INPUT_SELECTED_TO_STATE(payload)),
     deleteTagFromState: (payload) => dispatch(REMOVE_TAG_FROM_TAG_ARRAY(payload)),
-    getPostFromLocalState: () => dispatch(GET_POST_FROM_LOCAL_STATE())
+    getPostFromLocalState: () => dispatch(GET_POST_FROM_LOCAL_STATE()),
+    submitSuccessfulDispatch: () => dispatch(SUBMIT_SUCCESSFUL())
 })
 
 const programmingLanguages = [

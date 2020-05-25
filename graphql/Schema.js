@@ -9,6 +9,7 @@ const typeDefs = gql`
         posts(userId: String): [Post]
         comments(postId: ID! ):[Comment],
         token: String
+        getAllPosts: [Post]
     }
     
     type Mutation {

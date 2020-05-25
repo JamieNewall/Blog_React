@@ -23,6 +23,10 @@ const resolvers = {
 
         async token(parent, args, context, info){
             return await context.dataSources.mongo.getToken();
+        },
+
+        async getAllPosts(parent, args, context, info) {
+            return await context.dataSources.mongo.getAllPosts()
         }
 
 

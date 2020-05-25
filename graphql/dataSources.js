@@ -90,6 +90,11 @@ class Mongo extends DataSource {
         return res;
     }
 
+    async getAllPosts() {
+        let res = await this.store.post.find({})
+        return res
+    }
+
 
 
 }
