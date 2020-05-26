@@ -39,6 +39,7 @@ const typeDefs = gql`
         postDate: Date
         postContent: String!
         postTitle: String!
+        tags: [String]
         views: Int
         likes: Int
         postId: Int

@@ -40,3 +40,11 @@ export const SUBMIT_SUCCESSFUL = function() {
 export const SET_POSTS = function(payload) {
     return {type: 'SET_POSTS', payload}
 }
+
+export const SET_SEARCH_STATE = function(payload) {
+    return {type:'SET_SEARCH_STATE', payload }
+}
+
+export const SET_SEARCH_REGEX = function(payload) {
+    return {type:'SET_SEARCH_REGEX', payload}
+}

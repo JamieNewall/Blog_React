@@ -15,7 +15,7 @@ import Post from "./Post";
 import gql from 'graphql-tag'
 import Axios from "axios";
 import { ApolloConsumer } from "@apollo/react-components";
-import {SET_POSTS} from '../../redux/actions'
+import {SET_POSTS, SET_SEARCH_REGEX, SET_SEARCH_STATE} from '../../redux/actions'
 
 
 
@@ -58,7 +58,7 @@ const getLocalState = gql`
 
 
 
-const Home = ({props, resetSubmit, submitSuccessful}) => {
+const Home = ({props, resetSubmit, submitSuccessful, searchInputState, setSearchInputState, searchRegex, setSearchRegex}) => {
 
     const client = useApolloClient()
 
@@ -68,6 +68,7 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
                 postTitle
                 postContent
                 views
+                tags
             }
         }
     `
@@ -79,6 +80,16 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
 
     const classes = useStyles()
     const {  enqueueSnackbar }  = useSnackbar();
+
+
+    let regex = new RegExp(searchRegex,'i')
+
+
+    const handleSearchInputChange = (e) => {
+        setSearchInputState(e.target.value)
+        setSearchRegex(e.target.value)
+
+    }
 
     return (
 
@@ -101,6 +112,8 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
                     <TextField
                     placeholder={'Search...'}
                     fullWidth
+                    value={searchInputState}
+                    onChange={handleSearchInputChange}
 
 
                     >
@@ -112,6 +125,8 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
         <Box mt={4}>
         <Grid container spacing={1} direction={'row'} className={classes.break}>
 
+
+
             <Query query={GetAllPostsQuery}>
                 { ({data, error, loading}) => {
                     if (loading) return 'loading....'
@@ -119,15 +134,25 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
 
                     return (
                         <>
-                        { data.getAllPosts.map( (post, i) => {
-                            return (
-                                <Grid key={i} item className={classes.post} sm={4}>
-                                <Post postTitle={post.postTitle.slice(0,8)} postBody={post.postContent.slice(0,20)}  />
-                                </Grid>
-                                )
-                        })}
+                            { data.getAllPosts.map( (post, i) => {
+
+
+                                let doesTagsContain = post.tags.filter((item) => {
+                                    return regex.test(item)
+                                })
+
+
+
+                                let a = (regex.test(post.postTitle) || regex.test(post.postContent) || doesTagsContain.length > 0 ) ?
+                                     <Grid key={i} item className={classes.post} sm={4}>
+                                        <Post postTitle={post.postTitle.slice(0,8)} postBody={post.postContent}  />
+                                    </Grid>
+                                    :  null
+                                return a
+                            })}
                         </>
-                        )}}
+                    )
+                }}
             </Query>
 
 
@@ -141,12 +166,16 @@ const Home = ({props, resetSubmit, submitSuccessful}) => {
 
 const stateToProps = (state) => ({
     submitSuccessful: state.submitSuccessful,
-    allPosts: state.allPosts
+    allPosts: state.allPosts,
+    searchInputState: state.searchInputState,
+    searchRegex: state.searchRegex
 
 })
 
 const dispatchToProps = (dispatch) => ({
     resetSubmit: () => dispatch({type:'RESET_SUBMIT'}),
+    setSearchInputState: (payload) => dispatch(SET_SEARCH_STATE(payload)),
+    setSearchRegex: (payload) => dispatch(SET_SEARCH_REGEX(payload))
 
 })
 

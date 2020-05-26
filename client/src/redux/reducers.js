@@ -32,8 +32,12 @@ const initialState = {
             return {...state}
         case 'SET_POSTS':
             return {...state, allPosts: [...state.allPosts, ...action.payload]}
+        case 'SET_SEARCH_STATE':
+            return {...state, searchInputState: action.payload}
         case 'ADD_TAG_INPUT_SELECTED_TO_STATE':
             return {...state, tagInputValueSelected: action.payload}
+        case 'SET_SEARCH_REGEX':
+            return {...state, searchRegex: action.payload}
         case 'REMOVE_TAG_FROM_TAG_ARRAY':
             return {...state, tagsArray: state.tagsArray.filter(item => item !== action.payload)}
         case 'SUBMIT_SUCCESSFUL':
