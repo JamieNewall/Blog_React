@@ -110,7 +110,7 @@ const Home = ({props, resetSubmit, submitSuccessful, searchInputState, setSearch
                 </Grid>
                 <Grid item style={{display:'block', width:'80%'}}>
                     <TextField
-                    placeholder={'Search...'}
+                    placeholder={'Search by content or tag...'}
                     fullWidth
                     value={searchInputState}
                     onChange={handleSearchInputChange}

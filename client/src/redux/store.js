@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 const middleware = [thunk]
 
-const initState = {allPosts: [], isLoggedIn: true, loginWarning: false, postText: '',
+const initState = {allPosts: [], isLoggedIn: false, userId:'', loginWarning: false, postText: '',
     currentPostWordCount: 0, titleText: '', tagsArray: [], tagInputValue:'',tagInputValueSelected:'',
 submitSuccessful: false, searchInputState:'',searchRegex:'' }
 

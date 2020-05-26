@@ -63,6 +63,7 @@ const typeDefs = gql`
     type token{
         user:  String 
         token: String
+        userId: String
     }
 
 `

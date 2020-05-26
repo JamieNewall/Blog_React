@@ -71,6 +71,7 @@ const LOGIN = gql`
     mutation login($input: credentials) {
         loginNow(input:$input) {
             token
+            userId
         }
     }
 `
@@ -87,16 +88,6 @@ const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginW
     const [login] = useMutation(LOGIN)
 
 
-
-
-
-
-
-    // const {data:{loginWarning}} = useQuery(LOGIN_WARNING)
-
-
-
-    // const [client, setClient] = useState(apolloClient)
     const [state, setState] = useState({email:'',password:''})
 
     const msgTimer = () => {
@@ -113,7 +104,7 @@ const Login = ({isLoggedIn, loginWarning, changeLoginWarningToFalse,changeLoginW
             return 'invalid email or password'
         }
         const {data} = await login({variables: {input: {email: state.email, password: state.password}}})
-
+        console.log(data)
         if(data.loginNow.token === null) {
 
            await changeLoginWarningToTrue()

@@ -34,8 +34,8 @@ const resolvers = {
     Mutation: {
         async loginNow(parent, args, context, info) {
 
-            const jwt = await context.dataSources.mongo.loginUser(args.input.email, args.input.password)
-            return {user:args.input.email ,token: jwt}
+            const {jwt, userId} = await context.dataSources.mongo.loginUser(args.input.email, args.input.password)
+            return {user:args.input.email ,token: jwt, userId:userId}
         },
 
         async addPost(parent, args, context, info) {

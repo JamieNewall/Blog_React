@@ -32,12 +32,12 @@ class Mongo extends DataSource {
         return comments
     }
 
-    async getToken(userId){
+    async getToken(payload){
 
         //TODO move to env
         const SECRET_KEY = '53hdkflfj32435345lk423l4j234'
 
-        const jwtToken = jwt.sign({"payload":userId}, SECRET_KEY, {expiresIn: '1 day'})
+        const jwtToken = jwt.sign({"payload":payload}, SECRET_KEY, {expiresIn: '1 day'})
 
 
         return jwtToken;
@@ -48,6 +48,8 @@ class Mongo extends DataSource {
     async loginUser(email , password) {
 
         const user = await this.store.user.findOne({email: email})
+        console.log(`user is` )
+        console.log(user)
         if(user === null || user.length === 0) {
             return null
         }
@@ -56,10 +58,10 @@ class Mongo extends DataSource {
         const response = await this.comparePass(password, hashPass)
 
         if (response) {
-            const jwt = await this.getToken(123)
+            const jwt = await this.getToken(email)
 
             await this.store.token.create({user:_id, token:jwt})
-            return jwt
+            return {jwt, userId: user._id}
         } else {
             return null
         }
