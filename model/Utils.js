@@ -110,11 +110,13 @@ const hash = hashPass('mypassword').then(res => {
 
 // createUser('Jamie', 'Newall', 'jnewall93@outlook.com', '44ffdfdfd', 'JamesP123')
 // createUser('Jamie','Newall','jnewall93@outlook.com','$2b$10$dDvsmCCxQiHNu7cbcoTaC.k21Ma0zmpWJEaHL9Mb7MZ8.CzQUGZ7a','jamesp')
-// createPost('bla bla bla', 'tite', '5ebc0ce9ac118441684943bd')
+createPost('test content', 'test-1', '5ebc0ce9ac118441684943bd')
+createPost('test content', 'test-2', '5ebc0ce9ac118441684943bd')
+createPost('test content', 'test-3', '5ebc0ce9ac118441684943bd')
 // createComment('5ebc1a3013234b054c6f7809', 'this is the comment')
 // createToken('5ebc0ce9ac118441684943bd','TOKEN2299')
 // getUser( 'jnewall93@outlook.com')
-removePosts()
+// removePosts()
 
 
 
