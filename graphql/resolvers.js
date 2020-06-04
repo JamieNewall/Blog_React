@@ -26,7 +26,13 @@ const resolvers = {
         },
 
         async getAllPosts(parent, args, context, info) {
-            return await context.dataSources.mongo.getAllPosts()
+            const res = await context.dataSources.mongo.getAllPosts()
+            console.log(res)
+            return res
+        },
+        async getSpecificPost(parent, args, context, info){
+            const res = await context.dataSources.mongo.getSpecificPost(args.postId)
+            return res[0]
         }
 
 
@@ -43,12 +49,24 @@ const resolvers = {
             let post = await context.dataSources.mongo.createPost(args.post.postContent, args.post.postTitle, args.post.tags, args.post.user)
 
             return post;
+        },
+
+        async deletePost(parent,args, context, info){
+
+            let message = await context.dataSources.mongo.deletePost(args.postId)
+            console.log(message)
+            return message
+        },
+
+        async amendPost(parent, args, context, info){
+            let res = await context.dataSources.mongo.amendPost(args.postId, args.post)
+            return res
         }
-    }
 
 
 
-}
+
+}}
 
 
 

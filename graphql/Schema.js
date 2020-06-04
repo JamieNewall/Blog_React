@@ -10,6 +10,7 @@ const typeDefs = gql`
         comments(postId: ID! ):[Comment],
         token: String
         getAllPosts: [Post]
+        getSpecificPost(postId: String): Post
     }
     
     type Mutation {
@@ -17,6 +18,8 @@ const typeDefs = gql`
         addUser(user: ID): User
         addComment(comment: String): Comment
         loginNow(input: credentials): token
+        deletePost(postId: String): String
+        amendPost(postId: String, post: newPost): Post
     }
     
   
@@ -34,15 +37,17 @@ const typeDefs = gql`
         user: String
     }
     
+   
+    
     type Post {
         userId: String
         postDate: Date
-        postContent: String!
-        postTitle: String!
+        postContent: String
+        postTitle: String
         tags: [String]
         views: Int
         likes: Int
-        postId: Int
+        _id: String
     }
     
     type User {
@@ -67,10 +72,5 @@ const typeDefs = gql`
     }
 
 `
-
-//TODO figure out how fits into server
-const resolverFunctions = {
-    Date: resolverMap
-}
 
 module.exports = typeDefs

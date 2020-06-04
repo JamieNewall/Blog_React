@@ -1,49 +1,47 @@
 /* eslint-disable */
 import React from "react";
-import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./Theme/Theme";
 import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import Navbar from "./pages/Nav/Nav";
+import EditPost from "./pages/edit_post/EditPost";
 import "typeface-roboto";
-import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import About from "./pages/About/About";
+import { Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import ProtectedRoute from "./pages/Login/ProtectedRoute";
-import addPost from './pages/add/addPost'
-
-
+import addPost from "./pages/add/addPost";
+import AllPosts from "./pages/all_posts/AllPosts";
+import ReadPost from "./pages/read/ReadPost";
+import CreateAccount from "./pages/Login/CreateAccount"
 
 function App({ isLoggedIn }) {
   console.log(isLoggedIn);
 
   return (
+    <ThemeProvider theme={theme}>
+      <Navbar />
 
-      <ThemeProvider theme={theme}>
+      <Switch>
+        <ProtectedRoute Component={Home} exact path={"/"} />
+        <ProtectedRoute Component={Home} exact path={"/home"} />
+        <ProtectedRoute Component={addPost} exact path={"/add_post"} />
+        <ProtectedRoute Component={AllPosts} exact path={"/all_posts"} />
+        <ProtectedRoute Component={EditPost} exact path={"/edit_post/:id"} />
+        <ProtectedRoute Component={ReadPost} exact path={"/post/:id"} />
 
-        <Navbar />
+        <Route exact path={"/login"}>
+          <Login />
+        </Route>
 
-        <Switch>
-
-          <ProtectedRoute Component={Home} exact path={"/"} />
-          <ProtectedRoute Component={Home} exact path={"/home"} />
-
-         <ProtectedRoute Component={addPost} exact path={"/add_post"} />
-
-          <Route exact path={"/login"}>
-            <Login />
-          </Route>
-          <Route exact path={"/about"}>
-            <About />
-          </Route>
-        </Switch>
-
-
-
-      </ThemeProvider>
+        <Route exact path={"/create_account"}>
+          <CreateAccount />
+        </Route>
 
 
 
+      </Switch>
+    </ThemeProvider>
   );
 }
 

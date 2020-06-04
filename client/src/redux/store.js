@@ -7,7 +7,7 @@ const middleware = [thunk]
 
 const initState = {allPosts: [], isLoggedIn: false, userId:'', loginWarning: false, postText: '',
     currentPostWordCount: 0, titleText: '', tagsArray: [], tagInputValue:'',tagInputValueSelected:'',
-submitSuccessful: false, searchInputState:'',searchRegex:'' }
+submitSuccessful: false, searchInputState:'',searchRegex:'', postToRead:'' }
 
 const store = createStore(
     rootReducer, initState,

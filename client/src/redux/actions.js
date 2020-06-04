@@ -48,3 +48,11 @@ export const SET_SEARCH_STATE = function(payload) {
 export const SET_SEARCH_REGEX = function(payload) {
     return {type:'SET_SEARCH_REGEX', payload}
 }
+
+export const SET_USER_ID_IN_STATE = function(payload) {
+    return {type: 'SET_USER_ID_IN_STATE' , payload}
+}
+
+export const SET_POST_TO_READ = function(payload) {
+    return {type: 'SET_POST_TO_READ', payload}
+}

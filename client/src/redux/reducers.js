@@ -25,13 +25,17 @@ const initialState = {
         case 'ADD_TAG_INPUT_TO_STATE':
             return {...state, tagInputValue: action.payload}
         case 'ADD_TAGS_TO_STATE':
-
-            return {...state, tagsArray: [...state.tagsArray, action.payload]}
+             return {...state, tagsArray: [...state.tagsArray, action.payload]}
+        case 'RESET_TAGS_STATE':
+            return {...state, tagsArray:[]}
         case 'GET_POST_FROM_LOCAL_STATE':
-            console.log('my reducer has been hit')
-            return {...state}
+             return {...state}
+        case 'RESET_POST_STATE':
+            return {...state, titleText: '', postText: '', tagsArray: []}
         case 'SET_POSTS':
             return {...state, allPosts: [...state.allPosts, ...action.payload]}
+        case 'SET_USER_ID_IN_STATE':
+            return {...state, userId: action.payload}
         case 'SET_SEARCH_STATE':
             return {...state, searchInputState: action.payload}
         case 'ADD_TAG_INPUT_SELECTED_TO_STATE':
@@ -45,8 +49,11 @@ const initialState = {
         case 'RESET_SUBMIT':
             return {...state, submitSuccessful: false}
         case 'ADD_POST_TO_STATE':
-
             return {...state, currentPostWordCount: action.payload.length, postText: action.payload }
+        case 'SET_POST_TO_READ':
+            return {...state, postToRead: action.payload}
+        case 'LOGOUT':
+                return {...state, isLoggedIn: false, userId:''}
         default:
             return {...state}
     }

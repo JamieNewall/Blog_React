@@ -5,8 +5,6 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,9 +13,17 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 140,
   },
+  cardContent: {
+    width: "100%",
+  },
+  title: {
+    fontSize: "1rem",
+    width: "100%",
+    display: "block",
+  },
 }));
 
-const Post = ({ postTitle, postBody }) => {
+const Post = ({ postTitle, postBody, postId }) => {
   const classes = useStyles();
 
   return (
@@ -28,23 +34,27 @@ const Post = ({ postTitle, postBody }) => {
           image={"https://picsum.photos/345/140"}
           title={"Test Post"}
         />
-        <CardContent>
-          <Typography noWrap gutterBottom variant={"h5"} component={"h2"}>
+        <CardContent className={classes.cardContent}>
+          <Typography
+            gutterBottom
+            variant={"h6"}
+            align={"left"}
+            component={"p"}
+            className={classes.title}
+          >
             {postTitle}
           </Typography>
-          <Typography noWrap variant={"body2"} color={"textSecondary"} component={"p"}>
+          <Typography
+            noWrap
+            variant={"body2"}
+            color={"textSecondary"}
+            component={"p"}
+            align={"center"}
+          >
             {postBody}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        <Button size={"small"} color={"primary"}>
-          Share
-        </Button>
-        <Button size={"small"} color={"primary"}>
-          Learn More
-        </Button>
-      </CardActions>
     </Card>
   );
 };
