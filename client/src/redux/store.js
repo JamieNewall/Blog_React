@@ -5,9 +5,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 const middleware = [thunk]
 
-const initState = {allPosts: [], isLoggedIn: false, userId:'', loginWarning: false, postText: '',
+const initState = {allPosts: [], isLoggedIn: false, accountCreatedSuccess: false,  userId:'', loginWarning: false, createAccountWarning: false, postText: '',
     currentPostWordCount: 0, titleText: '', tagsArray: [], tagInputValue:'',tagInputValueSelected:'',
-submitSuccessful: false, searchInputState:'',searchRegex:'', postToRead:'' }
+submitSuccessful: false, searchInputState:'',searchRegex:'', postToRead:''}
 
 const store = createStore(
     rootReducer, initState,

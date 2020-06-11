@@ -54,6 +54,14 @@ const initialState = {
             return {...state, postToRead: action.payload}
         case 'LOGOUT':
                 return {...state, isLoggedIn: false, userId:''}
+        case 'CHANGE_CREATE_ACCOUNT_WARNING_TO_TRUE':
+            return {...state, createAccountWarning: true}
+        case 'CHANGE_CREATE_ACCOUNT_WARNING_TO_FALSE':
+            return {...state, createAccountWarning: false}
+        case 'ACCOUNT_CREATED':
+            return {...state, accountCreatedSuccess: true}
+        case 'ACCOUNT_CREATED_SUCCESS_TO_FALSE':
+            return {...state, accountCreatedSuccess: false}
         default:
             return {...state}
     }

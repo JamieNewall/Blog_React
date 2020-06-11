@@ -184,7 +184,7 @@ const AddPost = ({
         />
         <div
           className={classes.wordCount}
-        >{`${currentPostWordCount} Words`}</div>
+        >{`${currentPostWordCount} Characters`}</div>
         <h3 className={classes.title}>Tags</h3>
         <Autocomplete
           id="tags"

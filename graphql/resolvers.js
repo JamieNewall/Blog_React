@@ -61,6 +61,12 @@ const resolvers = {
         async amendPost(parent, args, context, info){
             let res = await context.dataSources.mongo.amendPost(args.postId, args.post)
             return res
+        },
+
+        async createUserAccount(parent, args, context, info) {
+            let res = await context.dataSources.mongo.createUserAccount(args.user)
+
+            return res
         }
 
 

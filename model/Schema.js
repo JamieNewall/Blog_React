@@ -24,11 +24,11 @@ const postSchema = new mongoose.Schema({
     tags: Array
 })
 
-const commentSchema = new mongoose.Schema({
-    postId: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
-    commentDate: mongoose.Schema.Types.Date,
-    comment: String
-})
+// const commentSchema = new mongoose.Schema({
+//     postId: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
+//     commentDate: mongoose.Schema.Types.Date,
+//     comment: String
+// })
 
 const tokenSchema = new mongoose.Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
@@ -37,13 +37,13 @@ const tokenSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema)
 const Post = mongoose.model('Post', postSchema)
-const Comment = mongoose.model('Comment', commentSchema)
+// const Comment = mongoose.model('Comment', commentSchema)
 const Token = mongoose.model('Token', tokenSchema)
 
 const mongoDB = {}
 mongoDB.user = User;
 mongoDB.post = Post;
-mongoDB.comment = Comment;
+// mongoDB.comment = Comment;
 mongoDB.token = Token;
 
 

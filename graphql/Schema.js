@@ -1,5 +1,4 @@
 const {gql} = require('apollo-server')
-const resolverMap = require('./DateResolver')
 
 const typeDefs = gql`
 
@@ -20,12 +19,22 @@ const typeDefs = gql`
         loginNow(input: credentials): token
         deletePost(postId: String): String
         amendPost(postId: String, post: newPost): Post
+        createUserAccount(user: createUser): email
     }
     
   
     input credentials {
     email: String,
     password: String
+    }
+    
+    input createUser {
+        email: String,
+        password: String
+    }
+    
+    type email {
+        email: String
     }
     
     scalar Date

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -16,8 +16,7 @@ import { useApolloClient, useMutation, useQuery } from "@apollo/react-hooks";
 import { Redirect, BrowserRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { SET_USER_ID_IN_STATE } from "../../redux/actions";
-
-const { useEffect } = require("react");
+import { SnackbarProvider, useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,18 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Copyright() {
-  return (
-    <Typography variant={"body2"} color={"textSecondary"} aligns={"center"}>
-      {"Copyright ©"}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+
 
 const LOGIN = gql`
   mutation login($input: credentials) {
@@ -73,12 +61,14 @@ const Login = ({
   changeLoginWarningToTrue,
   changeLoginStatusToTrue,
   setUserIdInState,
-
+  accountCreatedSuccess,
+  setAccountCreatedSuccessToFalse,
 }) => {
   const classes = useStyles();
   const client = useApolloClient();
 
   const [login] = useMutation(LOGIN);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [state, setState] = useState({ email: "", password: "" });
 
@@ -87,6 +77,10 @@ const Login = ({
       changeLoginWarningToFalse();
     }, 4000);
   };
+
+  useEffect(() => {
+    setAccountCreatedSuccessToFalse()
+  },[])
 
   const signIn = async (e, client) => {
     e.preventDefault();
@@ -130,6 +124,10 @@ const Login = ({
           <Typography component={"h1"} variant={"h5"}>
             Sign In
           </Typography>
+
+          {accountCreatedSuccess &&
+            enqueueSnackbar("Account Created!", { variant: "success" })
+          }
 
           {loginWarning && (
             <Box className={classes.warning}>
@@ -178,7 +176,6 @@ const Login = ({
               autoComplete={"current-password"}
             />
 
-
             <Button
               type={"submit"}
               fullWidth
@@ -190,7 +187,6 @@ const Login = ({
               Sign In
             </Button>
             <Grid container>
-
               <Grid item>
                 <Link href={"/create_account"} variant={"body2"}>
                   {"Dont have an account? Sign Up"}
@@ -200,7 +196,7 @@ const Login = ({
           </form>
         </div>
         <Box mt={8}>
-          <Copyright />
+
         </Box>
       </Container>
     </React.Fragment>
@@ -211,6 +207,7 @@ const mapStateToProps = (state) => ({
   isLoggedIn: state.isLoggedIn,
   loginWarning: state.loginWarning,
   userId: state.userId,
+  accountCreatedSuccess: state.accountCreatedSuccess,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -221,6 +218,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeLoginStatusToTrue: () => dispatch({ type: "CHANGE_LOGIN_STATUS_TRUE" }),
   getState: () => dispatch({ type: "DEFAULT" }),
   setUserIdInState: (payload) => dispatch(SET_USER_ID_IN_STATE(payload)),
+  setAccountCreatedSuccessToFalse: () =>
+    dispatch({ type: "ACCOUNT_CREATED_SUCCESS_TO_FALSE" }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

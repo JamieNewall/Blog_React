@@ -16,7 +16,6 @@ import ReadPost from "./pages/read/ReadPost";
 import CreateAccount from "./pages/Login/CreateAccount"
 
 function App({ isLoggedIn }) {
-  console.log(isLoggedIn);
 
   return (
     <ThemeProvider theme={theme}>

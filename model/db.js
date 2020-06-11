@@ -1,8 +1,10 @@
+const path = require('path')
+require('dotenv').config({path: path.resolve(__dirname,'../.env')})
+
 const mongoose = require('mongoose')
-require('dotenv').config()
+const URI = process.env.REACT_APP_URI
 
-
-mongoose.connect(process.env.URI, {useNewUrlParser: true,
+mongoose.connect(URI, {useNewUrlParser: true,
 useUnifiedTopology: true})
 const db = mongoose.connection
 

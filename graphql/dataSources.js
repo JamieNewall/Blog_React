@@ -2,7 +2,6 @@ const { DataSource } = require("apollo-datasource");
 const jwt = require("jsonwebtoken");
 const { uuid } = require("uuidv4");
 const bcrypt = require("bcrypt");
-require('dotenv').config()
 
 class Mongo extends DataSource {
   constructor(store) {
@@ -25,15 +24,11 @@ class Mongo extends DataSource {
 
   async getComments(post) {
     let comments = await this.store.comment.find({ postId: post });
-    console.log(comments);
     return comments;
   }
 
   async getToken(payload) {
-
-
-
-    const jwtToken = jwt.sign({ payload: payload }, process.env.SECRET_KEY, {
+    const jwtToken = jwt.sign({ payload: payload }, process.env.REACT_APP_SECRET_KEY, {
       expiresIn: "1 day",
     });
 
@@ -42,8 +37,7 @@ class Mongo extends DataSource {
 
   async loginUser(email, password) {
     const user = await this.store.user.findOne({ email: email });
-    console.log(`user is`);
-    console.log(user);
+
     if (user === null || user.length === 0) {
       return null;
     }
@@ -53,7 +47,6 @@ class Mongo extends DataSource {
 
     if (response) {
       const jwt = await this.getToken(email);
-
       await this.store.token.create({ user: _id, token: jwt });
       return { jwt, userId: user._id };
     } else {
@@ -113,6 +106,41 @@ class Mongo extends DataSource {
     );
     return res;
   }
+
+  async createUserAccount(user) {
+    let checkUnique = await this.store.user.find({email: user.email})
+
+
+    if (checkUnique.length > 1) {
+      return {email: 'already exists'}
+    }
+
+    let {email, password} = user
+    const salt = 10
+
+    await bcrypt.hash(password, salt, async (err, hash) => {
+      if (err) {
+        return {email: 'error'}
+      }
+
+      const hashPass = hash
+      await this.store.user.create({email, hashPass})
+
+    })
+
+
+
+    // const res = await this.store.user.findOne({email})
+    // let {hashPass} = res
+    // let rEmail = res.email
+    // return {email: rEmail, hashPass}
+
+    return {email}
+
+  }
+
+
+
 }
 
 module.exports = Mongo;

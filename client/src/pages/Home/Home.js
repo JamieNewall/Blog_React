@@ -111,7 +111,7 @@ const Home = ({
 
       <Box mt={4}>
         <Grid container spacing={1} direction={"row"} className={classes.break}>
-          <Query query={GetAllPostsQuery}>
+          <Query query={GetAllPostsQuery} fetchPolicy={"no-cache"}>
             {({ data, error, loading }) => {
               if (loading) return "loading....";
               if (error) return "something went wrong....";
