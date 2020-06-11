@@ -1,40 +1,53 @@
 /* eslint-disable */
 import React from "react";
-import {makeStyles, ThemeProvider} from '@material-ui/core/styles'
-import theme from './Theme/Theme'
-import Login from './pages/Login/Login'
-import Home from './pages/Home/Home'
-import Navbar from './pages/Nav/Nav'
-import 'typeface-roboto'
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
-import About from './pages/About/About'
-import {ApolloProvider} from '@apollo/react-hooks'
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "./Theme/Theme";
+import Login from "./pages/Login/Login";
+import Home from "./pages/Home/Home";
+import Navbar from "./pages/Nav/Nav";
+import EditPost from "./pages/edit_post/EditPost";
+import "typeface-roboto";
+import { Switch, Route } from "react-router-dom";
+import { connect } from "react-redux";
+import ProtectedRoute from "./pages/Login/ProtectedRoute";
+import addPost from "./pages/add/addPost";
+import AllPosts from "./pages/all_posts/AllPosts";
+import ReadPost from "./pages/read/ReadPost";
+import CreateAccount from "./pages/Login/CreateAccount"
 
-
-
-function App() {
+function App({ isLoggedIn }) {
 
   return (
+    <ThemeProvider theme={theme}>
+      <Navbar />
 
-        <ThemeProvider theme={theme}>
-            <Navbar/>
-            <Router>
-            <Switch>
-                <Route path={'/home'}>
-                    <Home/>
-                </Route>
-                <Route path={'/login'}>
-                    <Login/>
-                </Route>
-                <Route path={'/About'}>
-                    <About/>
-                </Route>
+      <Switch>
+        <ProtectedRoute Component={Home} exact path={"/"} />
+        <ProtectedRoute Component={Home} exact path={"/home"} />
+        <ProtectedRoute Component={addPost} exact path={"/add_post"} />
+        <ProtectedRoute Component={AllPosts} exact path={"/all_posts"} />
+        <ProtectedRoute Component={EditPost} exact path={"/edit_post/:id"} />
+        <ProtectedRoute Component={ReadPost} exact path={"/post/:id"} />
 
-            </Switch>
-            </Router>
-        </ThemeProvider>
+        <Route exact path={"/login"}>
+          <Login />
+        </Route>
 
-      )
+        <Route exact path={"/create_account"}>
+          <CreateAccount />
+        </Route>
+
+
+
+      </Switch>
+    </ThemeProvider>
+  );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.isLoggedIn,
+});
+
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

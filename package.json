@@ -10,10 +10,10 @@
   },
   "scripts": {
     "dev": "concurrently \"npm run start \" \"npm run start --prefix client/\"",
-    "start": "node ./graphql/index.js",
+    "start": "nodemon --watch graphql/ ./graphql/index.js",
     "watch": "npm-watch",
     "start-frontend": "npm run start --prefix client/",
-    "test": "mocha './tests/'"
+    "test": "mocha './tests/' --exit"
   },
   "keywords": [],
   "author": "",
@@ -29,22 +29,31 @@
   "description": "",
   "dependencies": {
     "@material-ui/system": "^4.9.13",
+    "@types/react-redux": "^7.1.9",
     "apollo-datasource": "^0.7.0",
     "apollo-server": "^2.13.1",
     "apollo-server-testing": "^2.13.1",
     "bcrypt": "^4.0.1",
     "chai-jwt": "^2.0.0",
+    "cloudinary": "^1.21.0",
+    "dotenv": "^8.2.0",
     "graphql": "^15.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.13",
+    "multer": "^1.4.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "react-router-dom": "^5.1.2",
     "styled-components": "^5.1.0",
-    "typeface-roboto": "0.0.75"
+    "typeface-roboto": "0.0.75",
+    "uuidv4": "^6.0.9"
   },
   "devDependencies": {
+    "@apollo/react-hooks": "^3.1.5",
+    "apollo-client": "^2.6.10",
     "chai": "^4.2.0",
     "concurrently": "^5.2.0",
     "mocha": "^7.1.2",
+    "nodemon": "^2.0.4",
     "npm-watch": "^0.6.0",
     "prettier": "^2.0.5",
     "sinon": "^9.0.2",

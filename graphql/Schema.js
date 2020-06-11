@@ -1,5 +1,4 @@
 const {gql} = require('apollo-server')
-const resolverMap = require('./DateResolver')
 
 const typeDefs = gql`
 
@@ -9,13 +8,18 @@ const typeDefs = gql`
         posts(userId: String): [Post]
         comments(postId: ID! ):[Comment],
         token: String
+        getAllPosts: [Post]
+        getSpecificPost(postId: String): Post
     }
     
     type Mutation {
-        addPost(post: String): Post
+        addPost(post: newPost): Post
         addUser(user: ID): User
         addComment(comment: String): Comment
         loginNow(input: credentials): token
+        deletePost(postId: String): String
+        amendPost(postId: String, post: newPost): Post
+        createUserAccount(user: createUser): email
     }
     
   
@@ -24,16 +28,35 @@ const typeDefs = gql`
     password: String
     }
     
+    input createUser {
+        email: String,
+        password: String
+    }
+    
+    type email {
+        email: String
+    }
+    
     scalar Date
 
+    input newPost {
+        postContent: String
+        postTitle: String
+        tags: [String]
+        user: String
+    }
+    
+   
+    
     type Post {
         userId: String
         postDate: Date
-        postContent: String!
-        postTitle: String!
+        postContent: String
+        postTitle: String
+        tags: [String]
         views: Int
         likes: Int
-        postId: Int
+        _id: String
     }
     
     type User {
@@ -54,13 +77,9 @@ const typeDefs = gql`
     type token{
         user:  String 
         token: String
+        userId: String
     }
 
 `
-
-//TODO figure out how fits into server
-const resolverFunctions = {
-    Date: resolverMap
-}
 
 module.exports = typeDefs
