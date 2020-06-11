@@ -1,4 +1,4 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer } = require("apollo-server-lambda");
 const typeDefs = require("./Schema");
 const resolvers = require("./resolvers");
 const Mongo = require("../graphql/dataSources");
