@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/JamieNewall/auth-project/issues"
   },
-  "homepage": "https://github.com/JamieNewall/auth-project#readme",
+  "homepage": ".",
   "description": "",
   "dependencies": {
     "@material-ui/system": "^4.9.13",
